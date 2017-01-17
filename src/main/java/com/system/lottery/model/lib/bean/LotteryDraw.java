@@ -11,8 +11,6 @@ public class LotteryDraw extends Ticket {
 	
 	private Double prize;
 	
-	private Boolean winner;
-
 	public Date getDrawOn() {
 		return drawOn;
 	}
@@ -27,13 +25,5 @@ public class LotteryDraw extends Ticket {
 
 	public void setPrize(Double prize) {
 		this.prize = prize;
-	}
-
-	public Boolean getWinner() {
-		return winner;
-	}
-
-	public void setWinner(Boolean winner) {
-		this.winner = winner;
 	}
 }
