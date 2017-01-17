@@ -5,14 +5,13 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.system.lottery.lib.bean.LotteryDrawFixture;
 import com.system.lottery.model.lib.bean.LotteryDraw;
 import com.system.lottery.model.lib.ws.LotteryResultWS;
 import com.system.lottery.model.lib.ws.TicketWS;
@@ -40,11 +39,7 @@ public class LotteryManagerApiImplTest {
 	
 	@Test
 	public void testDrawResult_winnerTrue() {
-		LotteryDraw lotteryDraw = new LotteryDraw();
-		lotteryDraw.setCombination(null);
-		lotteryDraw.setDrawOn(new Date());
-		lotteryDraw.setNumber(1);
-		lotteryDraw.setPrize(2.5);
+		LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
 		when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
 		
 		TicketWS ticketWS = new TicketWS();
@@ -61,11 +56,7 @@ public class LotteryManagerApiImplTest {
 	
 	@Test
 	public void testDrawResult_winnerFalse() {
-		LotteryDraw lotteryDraw = new LotteryDraw();
-		lotteryDraw.setCombination(null);
-		lotteryDraw.setDrawOn(new Date());
-		lotteryDraw.setNumber(1);
-		lotteryDraw.setPrize(2.5);
+		LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
 		when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
 		
 		TicketWS ticketWS = new TicketWS();
