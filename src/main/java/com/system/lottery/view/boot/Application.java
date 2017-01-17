@@ -1,4 +1,4 @@
-package com.system.loterry.view.boot;
+package com.system.lottery.view.boot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"com.system.loterry.model", "com.system.loterry.controller"})
+@ComponentScan(basePackages = {"com.system.lottery.model", "com.system.lottery.controller"})
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 

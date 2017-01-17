@@ -1,11 +1,11 @@
-package com.system.loterry.model.lib.bean;
+package com.system.lottery.model.lib.ws;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Ticket {
+public class TicketWS {
 
 	private Integer number;
 	

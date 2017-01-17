@@ -1,4 +1,4 @@
-package com.system.loterry.model.lib.ws;
+package com.system.lottery.model.lib.ws;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

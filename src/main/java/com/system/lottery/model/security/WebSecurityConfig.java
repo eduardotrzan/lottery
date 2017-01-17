@@ -1,4 +1,4 @@
-package com.system.loterry.model.security;
+package com.system.lottery.model.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

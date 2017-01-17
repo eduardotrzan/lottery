@@ -1,11 +1,11 @@
-package com.system.loterry.model.wrappers;
+package com.system.lottery.model.wrappers;
 
 import javax.validation.constraints.NotNull;
 
-import com.system.loterry.model.lib.bean.LotteryDraw;
-import com.system.loterry.model.lib.bean.Ticket;
-import com.system.loterry.model.lib.ws.LotteryDrawWS;
-import com.system.loterry.model.lib.ws.TicketWS;
+import com.system.lottery.model.lib.bean.LotteryDraw;
+import com.system.lottery.model.lib.bean.Ticket;
+import com.system.lottery.model.lib.ws.LotteryDrawWS;
+import com.system.lottery.model.lib.ws.TicketWS;
 
 public final class WSBuilder {
 	

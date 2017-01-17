@@ -1,4 +1,4 @@
-package com.system.loterry.controller.impl;
+package com.system.lottery.controller.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.system.loterry.controller.interfaces.LotteryManagerApi;
-import com.system.loterry.model.lib.bean.LotteryDraw;
-import com.system.loterry.model.lib.ws.LotteryResultWS;
-import com.system.loterry.model.lib.ws.TicketWS;
-import com.system.loterry.model.services.interfaces.LotteryService;
-import com.system.loterry.model.wrappers.WSBuilder;
+import com.system.lottery.controller.interfaces.LotteryManagerApi;
+import com.system.lottery.model.lib.bean.LotteryDraw;
+import com.system.lottery.model.lib.ws.LotteryResultWS;
+import com.system.lottery.model.lib.ws.TicketWS;
+import com.system.lottery.model.services.interfaces.LotteryService;
+import com.system.lottery.model.wrappers.WSBuilder;
 
 @RestController
 @RequestMapping("/lottery")

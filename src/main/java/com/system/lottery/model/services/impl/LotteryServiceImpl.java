@@ -1,12 +1,12 @@
-package com.system.loterry.model.services.impl;
+package com.system.lottery.model.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.system.loterry.model.lib.bean.LotteryDraw;
-import com.system.loterry.model.lib.bean.Ticket;
-import com.system.loterry.model.services.interfaces.LotteryService;
+import com.system.lottery.model.lib.bean.LotteryDraw;
+import com.system.lottery.model.lib.bean.Ticket;
+import com.system.lottery.model.services.interfaces.LotteryService;
 
 @Service
 public class LotteryServiceImpl implements LotteryService {

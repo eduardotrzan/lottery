@@ -1,4 +1,4 @@
-package com.system.loterry.model.configuration;
+package com.system.lottery.model.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
