@@ -29,7 +29,7 @@ public class LotteryDrawFixture {
 	}
 	
 	public LotteryDrawFixture combination(List<Integer> combination) {
-		this.combination(combination);
+		this.lotteryDraw.setCombination(combination);
 		return this;
 	}
 	

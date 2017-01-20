@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
 
 import org.joda.time.DateTime;
 import org.joda.time.Months;
@@ -35,21 +38,65 @@ public class LotteryServiceImpl implements LotteryService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LotteryServiceImpl.class);
 
+	@Override
 	public LotteryDraw getLatestDrawResult() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.lotteryDAO.findLast();
 	}
 
-	public Boolean isWinner(Ticket ticket) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException {
+		LinkedHashMap<Long, Ticket> winnerTickets = new LinkedHashMap<>();
+		Double totalPrize = this.lotteryDAO.findLast().getPrize();
+		List<Double> prizeDistribution = this.appConfiguration.getPrizeDistribution();
+		for (Ticket ticket : tickets) {
+			int size = winnerTickets.size();
+			if ((size < 3) && isWinner(ticket)) {
+				ticket.setPrize(totalPrize * prizeDistribution.get(size));
+				winnerTickets.put(ticket.getNumber(), ticket);
+			} else {
+				break;
+			}
+		}
+		
+		return winnerTickets
+				.values()
+				.stream()
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Boolean isWinner(@NotNull Ticket ticket) throws LotteryDrawException {
+		LotteryDraw lastLotteryDraw = this.lotteryDAO.findLast();
+		Date lotteryDrawOn = lastLotteryDraw.getDrawOn();
+		boolean sameDrawDate = this.sameDrawDate(ticket.getDrawOn(), lotteryDrawOn);
+		if (sameDrawDate) {
+			return lastLotteryDraw
+					.getCombination()
+					.stream()
+					.anyMatch(lotteryNumber -> lotteryNumber.equals(ticket.getNumber()));
+		}
+		throw new LotteryDrawException(ticket.getDrawOn(), "The draw from the ticket wasn't made yet.");
+	}
+	
+	@Override
+	public List<Ticket> nextDrawTickets() {
+		List<Ticket> nextDrawTickets = new ArrayList<>();
+		DateTime lastDrawOn = new DateTime(this.lotteryDAO.findLast().getDrawOn().getTime());
+		Date nextDrawOn = lastDrawOn.plusMonths(1).toDate();
+		for (long i = 1; i <= this.appConfiguration.getTotalNumbersLottery(); i++) {
+			Ticket ticket = new Ticket();
+			ticket.setDrawOn(nextDrawOn);
+			ticket.setNumber(i);
+		}
+		return nextDrawTickets;
 	}
 
+	@Override
 	public LotteryDraw drawPrize() throws LotteryDrawException {
 		LOGGER.info("Drawing a new result...");
 		Date date = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		
-		if (this.canDraw(date)) {
+		Date lotteryDrawOn = this.lotteryDAO.findLast().getDrawOn();
+		if (this.sameDrawDate(date, lotteryDrawOn)) {
 			throw new LotteryDrawException(date, "There was already a draw this month.");
 		}
 		
@@ -68,9 +115,8 @@ public class LotteryServiceImpl implements LotteryService {
 		}
 	}
 	
-	private boolean canDraw(Date date) {
-		Date lastDate = this.lotteryDAO.findLast().getDrawOn();
-		DateTime start = new DateTime(lastDate.getTime());
+	private boolean sameDrawDate(Date date, Date lotteryDrawOn) {
+		DateTime start = new DateTime(lotteryDrawOn.getTime());
 		DateTime end = new DateTime(date.getTime());
 		Months.monthsBetween(start, end);
 		int months = Months.monthsBetween(start, end).getMonths();

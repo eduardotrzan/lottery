@@ -1,4 +1,4 @@
-package com.system.lottery.model.lib.ws;
+package com.system.lottery.controller.lib.ws;
 
 import java.util.Date;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.system.lottery.controller.interfaces;
 
-import com.system.lottery.model.lib.ws.LotteryResultWS;
-import com.system.lottery.model.lib.ws.TicketWS;
+import com.system.lottery.controller.lib.ws.LotteryResultWS;
+import com.system.lottery.controller.lib.ws.TicketWS;
 
 public interface LotteryManagerApi {
 	

@@ -12,10 +12,10 @@ import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.system.lottery.controller.lib.ws.LotteryResultWS;
+import com.system.lottery.controller.lib.ws.TicketWS;
 import com.system.lottery.lib.bean.LotteryDrawFixture;
 import com.system.lottery.model.lib.bean.LotteryDraw;
-import com.system.lottery.model.lib.ws.LotteryResultWS;
-import com.system.lottery.model.lib.ws.TicketWS;
 import com.system.lottery.model.services.interfaces.LotteryService;
 
 public class LotteryManagerApiImplTest {
@@ -52,8 +52,8 @@ public class LotteryManagerApiImplTest {
 			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
 			
 			assertThat(lotteryResultWS).isNotNull();
-			assertThat(lotteryResultWS.getWinner()).isNotNull();
-			assertThat(lotteryResultWS.getWinner()).isTrue();
+			assertThat(lotteryResultWS.getWinners()).isNotNull();
+			assertThat(lotteryResultWS.getWinners()).hasSize(1);
 		} catch (Exception e) {
 			fail(e.getMessage(), e);
 		}
@@ -73,8 +73,8 @@ public class LotteryManagerApiImplTest {
 			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
 			
 			assertThat(lotteryResultWS).isNotNull();
-			assertThat(lotteryResultWS.getWinner()).isNotNull();
-			assertThat(lotteryResultWS.getWinner()).isTrue();
+			assertThat(lotteryResultWS.getWinners()).isNotNull();
+			assertThat(lotteryResultWS.getWinners()).hasSize(1);
 		} catch (Exception e) {
 			fail(e.getMessage(), e);
 		}

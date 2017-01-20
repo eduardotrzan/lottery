@@ -1,4 +1,6 @@
-package com.system.lottery.model.lib.ws;
+package com.system.lottery.controller.lib.ws;
+
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -8,6 +10,8 @@ public class TicketWS {
 	private Long number;
 	
 	private String name;
+	
+	private Date drawOn;
 
 	public Long getNumber() {
 		return number;
@@ -23,5 +27,13 @@ public class TicketWS {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getDrawOn() {
+		return drawOn;
+	}
+
+	public void setDrawOn(Date drawOn) {
+		this.drawOn = drawOn;
 	}
 }
