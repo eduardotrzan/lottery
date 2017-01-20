@@ -11,6 +11,7 @@ import com.system.lottery.controller.interfaces.LotteryManagerApi;
 import com.system.lottery.model.lib.bean.LotteryDraw;
 import com.system.lottery.model.lib.ws.LotteryResultWS;
 import com.system.lottery.model.lib.ws.TicketWS;
+import com.system.lottery.model.services.exceptions.LotteryDrawException;
 import com.system.lottery.model.services.interfaces.LotteryService;
 import com.system.lottery.model.wrappers.WSBuilder;
 
@@ -28,14 +29,18 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 			, consumes = "application/json"
 			)
     public LotteryResultWS drawResult(TicketWS ticketWS) {
-		LOGGER.info("Will draw result for ticket #{}", ticketWS.getNumber());
-		LotteryDraw lotteryDraw = lotteryService.getLatestDrawResult();
-		Boolean isWinner = lotteryService.isWinner(WSBuilder.toBean(ticketWS));
-		LOGGER.info("Is winner? {}", isWinner);
-		LotteryResultWS lotteryResultWS = new LotteryResultWS();
-		lotteryResultWS.setLotteryDraw(WSBuilder.toWS(lotteryDraw));
-		lotteryResultWS.setWinner(isWinner);
-		LOGGER.info("Informing the draw result from {} with prize of {}.", lotteryDraw.getDrawOn(), lotteryDraw.getPrize());
-		return lotteryResultWS;
+		try {
+			LOGGER.info("Will draw result for ticket #{}", ticketWS.getNumber());
+			LotteryDraw lotteryDraw = lotteryService.getLatestDrawResult();
+			Boolean isWinner = lotteryService.isWinner(WSBuilder.toBean(ticketWS));
+			LOGGER.info("Is winner? {}", isWinner);
+			LotteryResultWS lotteryResultWS = new LotteryResultWS();
+			lotteryResultWS.setLotteryDraw(WSBuilder.toWS(lotteryDraw));
+			lotteryResultWS.setWinner(isWinner);
+			LOGGER.info("Informing the draw result from {} with prize of {}.", lotteryDraw.getDrawOn(), lotteryDraw.getPrize());
+			return lotteryResultWS;
+		} catch (LotteryDrawException lde) {
+			return null; // change to WS error
+		}
     }
 }

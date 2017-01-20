@@ -2,6 +2,7 @@ package com.system.lottery.controller.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
@@ -39,35 +40,43 @@ public class LotteryManagerApiImplTest {
 	
 	@Test
 	public void testDrawResult_winnerTrue() {
-		LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
-		when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
-		
-		TicketWS ticketWS = new TicketWS();
-		ticketWS.setCombination(null);
-		ticketWS.setNumber(1);
-		
-		when(lotteryService.isWinner(anyObject())).thenReturn(true);
-		LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
-		
-		assertThat(lotteryResultWS).isNotNull();
-		assertThat(lotteryResultWS.getWinner()).isNotNull();
-		assertThat(lotteryResultWS.getWinner()).isTrue();
+		try {
+			LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
+			when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
+			
+			TicketWS ticketWS = new TicketWS();
+			ticketWS.setName("Test");
+			ticketWS.setNumber(1l);
+			
+			when(lotteryService.isWinner(anyObject())).thenReturn(true);
+			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
+			
+			assertThat(lotteryResultWS).isNotNull();
+			assertThat(lotteryResultWS.getWinner()).isNotNull();
+			assertThat(lotteryResultWS.getWinner()).isTrue();
+		} catch (Exception e) {
+			fail(e.getMessage(), e);
+		}
 	}
 	
 	@Test
 	public void testDrawResult_winnerFalse() {
-		LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
-		when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
-		
-		TicketWS ticketWS = new TicketWS();
-		ticketWS.setCombination(null);
-		ticketWS.setNumber(1);
-		
-		when(lotteryService.isWinner(anyObject())).thenReturn(false);
-		LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
-		
-		assertThat(lotteryResultWS).isNotNull();
-		assertThat(lotteryResultWS.getWinner()).isNotNull();
-		assertThat(lotteryResultWS.getWinner()).isTrue();
+		try {
+			LotteryDraw lotteryDraw = new LotteryDrawFixture().basic().getLotteryDraw();
+			when(lotteryService.getLatestDrawResult()).thenReturn(lotteryDraw);
+			
+			TicketWS ticketWS = new TicketWS();
+			ticketWS.setName("Test");
+			ticketWS.setNumber(1l);
+			
+			when(lotteryService.isWinner(anyObject())).thenReturn(false);
+			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
+			
+			assertThat(lotteryResultWS).isNotNull();
+			assertThat(lotteryResultWS.getWinner()).isNotNull();
+			assertThat(lotteryResultWS.getWinner()).isTrue();
+		} catch (Exception e) {
+			fail(e.getMessage(), e);
+		}
 	}
 }

@@ -16,6 +16,8 @@ public interface LotteryDAO {
 	
 	LotteryDraw findByDate(@NotNull Date date);
 	
+	LotteryDraw findLast();
+	
 	boolean save(@NotNull Date date, @NotNull LotteryDraw lotteryDraw) throws DuplicatedEntryException;
 	boolean update(@NotNull Date date, @NotNull LotteryDraw lotteryDraw) throws NotFoundEntryException;
 	boolean delete(@NotNull Date date) throws NotFoundEntryException;

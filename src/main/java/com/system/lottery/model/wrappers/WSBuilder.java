@@ -15,7 +15,6 @@ public final class WSBuilder {
 		LotteryDraw lotteryDraw = new LotteryDraw();
 		lotteryDraw.setCombination(lotteryDrawWS.getCombination());
 		lotteryDraw.setDrawOn(lotteryDrawWS.getDrawOn());
-		lotteryDraw.setNumber(lotteryDrawWS.getNumber());
 		lotteryDraw.setPrize(lotteryDrawWS.getPrize());
 		return lotteryDraw;
 	}
@@ -24,21 +23,20 @@ public final class WSBuilder {
 		LotteryDrawWS lotteryDrawWS = new LotteryDrawWS();
 		lotteryDrawWS.setCombination(lotteryDraw.getCombination());
 		lotteryDrawWS.setDrawOn(lotteryDraw.getDrawOn());
-		lotteryDrawWS.setNumber(lotteryDraw.getNumber());
 		lotteryDrawWS.setPrize(lotteryDraw.getPrize());
 		return lotteryDrawWS;
 	}
 	
 	public final static Ticket toBean(@NotNull TicketWS ticketWS) {
 		Ticket ticket = new Ticket();
-		ticket.setCombination(ticketWS.getCombination());
+		ticket.setName(ticketWS.getName());
 		ticket.setNumber(ticketWS.getNumber());
 		return ticket;
 	}
 	
 	public final static TicketWS toWS(@NotNull Ticket ticket) {
 		TicketWS ticketWS = new TicketWS();
-		ticketWS.setCombination(ticket.getCombination());
+		ticketWS.setName(ticket.getName());
 		ticketWS.setNumber(ticket.getNumber());
 		return ticketWS;
 	}

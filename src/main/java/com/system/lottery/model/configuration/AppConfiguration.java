@@ -10,12 +10,22 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfiguration {
 	
 	private int totalNumberPerDraw;
-
+	
+	private int totalNumbersLottery;
+	
 	public int getTotalNumberPerDraw() {
 		return totalNumberPerDraw;
 	}
 
 	public void setTotalNumberPerDraw(int totalNumberPerDraw) {
 		this.totalNumberPerDraw = totalNumberPerDraw;
+	}
+
+	public int getTotalNumbersLottery() {
+		return totalNumbersLottery;
+	}
+
+	public void setTotalNumbersLottery(int totalNumbersLottery) {
+		this.totalNumbersLottery = totalNumbersLottery;
 	}
 }

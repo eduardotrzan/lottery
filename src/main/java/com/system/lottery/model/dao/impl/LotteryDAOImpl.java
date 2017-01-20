@@ -36,6 +36,11 @@ public class LotteryDAOImpl implements LotteryDAO {
 	public LotteryDraw findByDate(@NotNull Date date) {
 		return this.db.getLotteryDrows().get(date);
 	}
+	
+	@Override
+	public LotteryDraw findLast() {
+		return this.db.getLotteryDrows().lastEntry().getValue();
+	}
 
 	@Override
 	public boolean save(Date date, LotteryDraw lotteryDraw) throws DuplicatedEntryException {

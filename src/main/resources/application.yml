@@ -1,2 +1,3 @@
 config:
-  totalNumberPerDraw: 5
+  totalNumberPerDraw: 3
+  totalNumbersLottery: 50

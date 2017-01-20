@@ -1,29 +1,27 @@
 package com.system.lottery.model.lib.ws;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TicketWS {
 
-	private Integer number;
+	private Long number;
 	
-	private List<Integer> combination;
+	private String name;
 
-	public Integer getNumber() {
+	public Long getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(Long number) {
 		this.number = number;
 	}
 
-	public List<Integer> getCombination() {
-		return combination;
+	public String getName() {
+		return name;
 	}
 
-	public void setCombination(List<Integer> combination) {
-		this.combination = combination;
+	public void setName(String name) {
+		this.name = name;
 	}
 }
