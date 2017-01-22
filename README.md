@@ -1,6 +1,6 @@
 # Lottery
 
-This is a Lottery concept for ESignLive.
+This is a Lottery concept.
 
 ## Local use
 
@@ -16,7 +16,7 @@ This is a Lottery concept for ESignLive.
 
 ### Ticket WS
 ### JSON
-```
+```json
 {
   "number": 33,
   "name": "Eduardo",
