@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ticket {
 
-	private Long number;
+	private Integer number;
 	
 	private String name;
 	
@@ -15,11 +15,11 @@ public class Ticket {
 	
 	private Double prize;
 
-	public Long getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(Long number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 

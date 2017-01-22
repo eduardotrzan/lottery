@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class TicketWS {
 
 	@NotNull
-	private Long number;
+	private Integer number;
 	
 	@NotNull
 	private String name;
@@ -20,11 +20,11 @@ public class TicketWS {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date drawOn;
 
-	public Long getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(Long number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 

@@ -46,7 +46,7 @@ public class LotteryManagerApiImplTest {
 			
 			TicketWS ticketWS = new TicketWS();
 			ticketWS.setName("Test");
-			ticketWS.setNumber(1l);
+			ticketWS.setNumber(1);
 			
 			when(lotteryService.isWinner(anyObject())).thenReturn(true);
 			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);
@@ -67,7 +67,7 @@ public class LotteryManagerApiImplTest {
 			
 			TicketWS ticketWS = new TicketWS();
 			ticketWS.setName("Test");
-			ticketWS.setNumber(1l);
+			ticketWS.setNumber(1);
 			
 			when(lotteryService.isWinner(anyObject())).thenReturn(false);
 			LotteryResultWS lotteryResultWS = lotteryManagerApi.drawResult(ticketWS);

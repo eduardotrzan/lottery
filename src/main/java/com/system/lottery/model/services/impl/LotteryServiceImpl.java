@@ -75,7 +75,7 @@ public class LotteryServiceImpl implements LotteryService {
 	
 	@Override
 	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException {
-		LinkedHashMap<Long, Ticket> winnerTickets = new LinkedHashMap<>();
+		LinkedHashMap<Integer, Ticket> winnerTickets = new LinkedHashMap<>();
 		Double totalPrize = this.getLatestDrawResult().getPrize();
 		List<Double> prizeDistribution = this.appConfiguration.getPrizeDistribution();
 		for (Ticket ticket : tickets) {
@@ -95,7 +95,6 @@ public class LotteryServiceImpl implements LotteryService {
 	}
 	
 	@Override
-	@Deprecated
 	public Boolean isWinner(@NotNull Ticket ticket) throws LotteryDrawException {
 		LotteryDraw lastLotteryDraw = this.getLatestDrawResult();
 		Date lotteryDrawOn = lastLotteryDraw.getDrawOn();
@@ -104,7 +103,7 @@ public class LotteryServiceImpl implements LotteryService {
 			return lastLotteryDraw
 					.getCombination()
 					.stream()
-					.anyMatch(lotteryNumber -> lotteryNumber.equals(ticket.getNumber()));
+					.anyMatch(lotteryNumber -> lotteryNumber.intValue() == ticket.getNumber().intValue());
 		}
 		throw new LotteryDrawException(ticket.getDrawOn(), "The draw from the ticket wasn't made yet.");
 	}
@@ -114,7 +113,7 @@ public class LotteryServiceImpl implements LotteryService {
 		List<Ticket> nextDrawTickets = new ArrayList<>();
 		DateTime lastDrawOn = new DateTime(this.getLatestDrawResult().getDrawOn().getTime());
 		Date nextDrawOn = lastDrawOn.plusMonths(1).toDate();
-		for (long i = 1; i <= this.appConfiguration.getTotalNumbersLottery(); i++) {
+		for (int i = 1; i <= this.appConfiguration.getTotalNumbersLottery(); i++) {
 			Ticket ticket = new Ticket();
 			ticket.setDrawOn(nextDrawOn);
 			ticket.setNumber(i);

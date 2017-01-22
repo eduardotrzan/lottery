@@ -19,7 +19,6 @@ public interface LotteryService {
 	Ticket checkWinner(@NotNull Ticket ticket) throws LotteryDrawException;
 	List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException;
 	
-	@Deprecated
 	Boolean isWinner(@NotNull Ticket ticket) throws LotteryDrawException;
 	
 	LotteryDraw drawPrize() throws LotteryDrawException;

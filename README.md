@@ -244,3 +244,27 @@ None
   }
 ]
 ```
+
+### Verify Result
+Verifies if a given Ticket was a winner considering its draw date provided.
+
+#### Method
+```java
+LotteryResultWS verifyResult(@RequestBody TicketWS ticketWS)
+```
+
+#### Endpoint :: POST
+http://localhost:8080/lottery/verifyResult
+
+##### Payload
+```json
+{
+  "number": 33,
+  "name": "Eduardo",
+  "drawOn": "2017-01-21"
+}
+```
+
+##### Result Example
+```json
+```
