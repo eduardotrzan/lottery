@@ -5,8 +5,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -76,12 +78,15 @@ public class LotteryServiceImpl implements LotteryService {
 	@Override
 	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException {
 		LinkedHashMap<Integer, Ticket> winnerTickets = new LinkedHashMap<>();
-		Double totalPrize = this.getLatestDrawResult().getPrize();
-		List<Double> prizeDistribution = this.appConfiguration.getPrizeDistribution();
+		LotteryDraw lastLotteryDraw = this.getLatestDrawResult();
+		Map<Integer, Double> prizePerPosition = this.prizePerPosition(lastLotteryDraw);
+		
+		Double totalPrize = lastLotteryDraw.getPrize();
 		for (Ticket ticket : tickets) {
 			int size = winnerTickets.size();
 			if ((size < 3) && isWinner(ticket)) {
-				ticket.setPrize(totalPrize * prizeDistribution.get(size));
+				double prizeForPosition = prizePerPosition.get(ticket.getNumber());
+				ticket.setPrize(totalPrize * prizeForPosition);
 				winnerTickets.put(ticket.getNumber(), ticket);
 			} else {
 				break;
@@ -92,6 +97,17 @@ public class LotteryServiceImpl implements LotteryService {
 				.values()
 				.stream()
 				.collect(Collectors.toList());
+	}
+	
+	private Map<Integer, Double> prizePerPosition(LotteryDraw lotteryDraw) throws LotteryDrawException {
+		List<Double> prizeDistribution = this.appConfiguration.getPrizeDistribution();
+		List<Integer> combination = lotteryDraw.getCombination();
+		Map<Integer, Double> prizePerPosition = new HashMap<>();
+		
+		for (int i = 0; i < prizeDistribution.size(); i++) {
+			prizePerPosition.put(combination.get(i), prizeDistribution.get(i));
+		}
+		return prizePerPosition;
 	}
 	
 	@Override
