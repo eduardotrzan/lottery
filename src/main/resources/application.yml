@@ -2,6 +2,7 @@ config:
   totalNumberPerDraw: 3
   totalNumbersLottery: 50
   prizeDistribution:
-  - firstPrize: 0.75
-  - secondPrize: 0.15
-  - thirdPrize: 0.10
+    - 0.75
+    - 0.15
+    - 0.10
+  generateLotterySince: Thu Jan 01 00:00:00 EST 2015

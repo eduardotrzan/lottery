@@ -1,5 +1,6 @@
 package com.system.lottery.model.configuration;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,6 +17,8 @@ public class AppConfiguration {
 	private int totalNumbersLottery;
 	
 	private List<Double> prizeDistribution;
+	
+	private Date generateLotterySince;
 	
 	public int getTotalNumberPerDraw() {
 		return totalNumberPerDraw;
@@ -39,5 +42,13 @@ public class AppConfiguration {
 
 	public void setPrizeDistribution(List<Double> prizeDistribution) {
 		this.prizeDistribution = prizeDistribution;
+	}
+
+	public Date getGenerateLotterySince() {
+		return generateLotterySince;
+	}
+
+	public void setGenerateLotterySince(Date generateLotterySince) {
+		this.generateLotterySince = generateLotterySince;
 	}
 }

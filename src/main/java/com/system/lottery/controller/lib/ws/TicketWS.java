@@ -2,15 +2,20 @@ package com.system.lottery.controller.lib.ws;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TicketWS {
 
+	@NotNull
 	private Long number;
 	
+	@NotNull
 	private String name;
 	
+	@NotNull
 	private Date drawOn;
 
 	public Long getNumber() {

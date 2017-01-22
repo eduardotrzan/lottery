@@ -17,7 +17,7 @@ public final class WSBuilder {
 	
 	private WSBuilder() { }
 	
-	public final static LotteryDraw toBean(@NotNull LotteryDrawWS lotteryDrawWS) {
+	public final static LotteryDraw toLotteryDrawBean(@NotNull LotteryDrawWS lotteryDrawWS) {
 		LotteryDraw lotteryDraw = new LotteryDraw();
 		lotteryDraw.setCombination(lotteryDrawWS.getCombination());
 		lotteryDraw.setDrawOn(lotteryDrawWS.getDrawOn());
@@ -25,12 +25,28 @@ public final class WSBuilder {
 		return lotteryDraw;
 	}
 	
-	public final static LotteryDrawWS toWS(@NotNull LotteryDraw lotteryDraw) {
+	public final static List<LotteryDraw> toLotteryDrawBean(List<LotteryDrawWS> lotteryDrawWSs) {
+		List<LotteryDraw> lotteryDraws = new ArrayList<>();
+		for (LotteryDrawWS lotteryDrawWS : lotteryDrawWSs) {
+			lotteryDraws.add(toLotteryDrawBean(lotteryDrawWS));
+		}
+		return lotteryDraws;
+	}
+	
+	public final static LotteryDrawWS toLotteryDrawWS(@NotNull LotteryDraw lotteryDraw) {
 		LotteryDrawWS lotteryDrawWS = new LotteryDrawWS();
 		lotteryDrawWS.setCombination(lotteryDraw.getCombination());
 		lotteryDrawWS.setDrawOn(lotteryDraw.getDrawOn());
 		lotteryDrawWS.setPrize(lotteryDraw.getPrize());
 		return lotteryDrawWS;
+	}
+	
+	public final static List<LotteryDrawWS> toLotteryDrawWS(List<LotteryDraw> lotteryDraws) {
+		List<LotteryDrawWS> lotteryDrawWSs = new ArrayList<>();
+		for (LotteryDraw lotteryDraw : lotteryDraws) {
+			lotteryDrawWSs.add(toLotteryDrawWS(lotteryDraw));
+		}
+		return lotteryDrawWSs;
 	}
 
 	public final static List<Ticket> toBean(@NotNull List<TicketWS> ticketWSs) {
@@ -49,7 +65,7 @@ public final class WSBuilder {
 		return ticket;
 	}
 	
-	public final static List<TicketWS> toWS(@NotNull List<Ticket> tickets) {
+	public final static List<TicketWS> toWS(List<Ticket> tickets) {
 		List<TicketWS> ticketWSs = new ArrayList<>();
 		for (Ticket ticket : tickets) {
 			ticketWSs.add(toWS(ticket));

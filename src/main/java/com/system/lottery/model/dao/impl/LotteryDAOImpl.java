@@ -39,6 +39,9 @@ public class LotteryDAOImpl implements LotteryDAO {
 	
 	@Override
 	public LotteryDraw findLast() {
+		if (this.db.getLotteryDrows().isEmpty()) {
+			return null;
+		}
 		return this.db.getLotteryDrows().lastEntry().getValue();
 	}
 
