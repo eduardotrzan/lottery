@@ -81,7 +81,11 @@ public final class WSBuilder {
 		return ticketWS;
 	}
 	
-	public static LotteryResultWS build(@NotNull Date drawOn, @NotNull List<Ticket> tickets) {
+	public static LotteryResultWS build(@NotNull List<Ticket> tickets) {
+		return build(null, tickets);
+	}
+	
+	public static LotteryResultWS build(Date drawOn, @NotNull List<Ticket> tickets) {
 		LotteryResultWS lotteryResultWS = new LotteryResultWS();
 		lotteryResultWS.setDrawOn(drawOn);
 		

@@ -16,7 +16,10 @@ public interface LotteryService {
 	List<LotteryDraw> getLatestQtdDraws(int quantity) throws LotteryDrawException;
 	LotteryDraw getDrawFrom(Date date) throws LotteryDrawException;
 	
+	Ticket checkWinner(@NotNull Ticket ticket) throws LotteryDrawException;
 	List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException;
+	
+	@Deprecated
 	Boolean isWinner(@NotNull Ticket ticket) throws LotteryDrawException;
 	
 	LotteryDraw drawPrize() throws LotteryDrawException;

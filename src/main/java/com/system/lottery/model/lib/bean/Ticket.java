@@ -46,4 +46,17 @@ public class Ticket {
 	public void setPrize(Double prize) {
 		this.prize = prize;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("LotteryDraw:"
+				+ " [number: %s]"
+				+ " [name: %s]"
+				+ " [drawOn: %s]"
+				+ " [prize: %s]"
+				, this.number
+				, this.name
+				, this.drawOn
+				, this.prize);
+	}
 }

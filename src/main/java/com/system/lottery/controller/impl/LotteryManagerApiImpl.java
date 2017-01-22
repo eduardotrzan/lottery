@@ -7,9 +7,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.system.lottery.controller.interfaces.LotteryManagerApi;
@@ -28,6 +30,8 @@ import com.system.lottery.model.utils.AppDateUtils;
 public class LotteryManagerApiImpl implements LotteryManagerApi {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LotteryManagerApiImpl.class);
+	
+	private static final String DATE_PATTERN = "yyyy-MM-dd";
 	
 	@Autowired
     private LotteryService lotteryService;
@@ -54,8 +58,7 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
     }
 
 	@RequestMapping(value="/currentDraw"
-			, method = RequestMethod.POST
-			, consumes = "application/json"
+			, method = RequestMethod.GET
 			)
 	@Override
 	public LotteryDrawWS getCurrentDraw() {
@@ -75,11 +78,10 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 	}
 
 	@RequestMapping(value="/drawFrom"
-			, method = RequestMethod.POST
-			, consumes = "application/json"
+			, method = RequestMethod.GET
 			)
 	@Override
-	public LotteryDrawWS getDrawFrom(Date date) {
+	public LotteryDrawWS getDrawFrom(@RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date date) {
 		try {
 			LotteryDraw lotteryDraw = this.lotteryService.getDrawFrom(date);
 			if (lotteryDraw != null) {
@@ -95,6 +97,9 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 		}
 	}
 
+	@RequestMapping(value="/latestYearDraws"
+			, method = RequestMethod.GET
+			)
 	@Override
 	public List<LotteryDrawWS> getLatestYearDraws() {
 		try {
@@ -111,8 +116,11 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 		}
 	}
 
+	@RequestMapping(value="/latestQtdDraws"
+			, method = RequestMethod.GET
+			)
 	@Override
-	public List<LotteryDrawWS> getLatestQtdDraws(int quantity) {
+	public List<LotteryDrawWS> getLatestQtdDraws(@RequestParam int quantity) {
 		try {
 			List<LotteryDraw> lotteryDraws = this.lotteryService.getLatestQtdDraws(quantity);
 			if ((lotteryDraws != null) && !lotteryDraws.isEmpty()) {
@@ -125,5 +133,69 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 			LOGGER.error(lde.getMessage(), lde);
 			return null; // change to WS error
 		}
+	}
+
+	@RequestMapping(value="/verifyResult"
+			, method = RequestMethod.POST
+			, consumes = "application/json"
+			)
+	@Override
+	public LotteryResultWS verifyResult(@RequestBody TicketWS ticketWS) {
+		try {
+			LOGGER.info("Verifying result for ticket {}.", ticketWS);
+			Ticket checkedTicket = this.lotteryService.checkWinner(WSBuilder.toBean(ticketWS));
+			
+			if (checkedTicket != null) {
+				return WSBuilder.build(checkedTicket.getDrawOn(), Arrays.asList(checkedTicket));
+			} else {
+				LOGGER.info("The ticket verified isn't a winner.");
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
+	}
+
+	@RequestMapping(value="/verifyResults"
+			, method = RequestMethod.POST
+			, consumes = "application/json"
+			)
+	@Override
+	public LotteryResultWS verifyResults(@RequestBody List<TicketWS> ticketWSs) {
+		try {
+			LOGGER.info("Verifying result for ticket {}.", ticketWSs);
+			List<Ticket> checkedTickets = this.lotteryService.checkWinners(WSBuilder.toBean(ticketWSs));
+			
+			if ((ticketWSs != null) && (!ticketWSs.isEmpty())) {
+				return WSBuilder.build(checkedTickets);
+			} else {
+				LOGGER.info("The tickets verified aren't winners.");
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
+	}
+
+	@RequestMapping(value="/verifyResultOnDate"
+			, method = RequestMethod.POST
+			, consumes = "application/json"
+			)
+	@Override
+	public LotteryResultWS verifyResultOnDate(@RequestBody TicketWS ticket, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@RequestMapping(value="/verifyResultsOnDate"
+			, method = RequestMethod.POST
+			, consumes = "application/json"
+			)
+	@Override
+	public LotteryResultWS verifyResultsOnDate(@RequestBody List<TicketWS> tickets, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

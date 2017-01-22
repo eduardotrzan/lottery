@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,6 +17,7 @@ public class TicketWS {
 	private String name;
 	
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date drawOn;
 
 	public Long getNumber() {
@@ -40,5 +42,16 @@ public class TicketWS {
 
 	public void setDrawOn(Date drawOn) {
 		this.drawOn = drawOn;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("LotteryDraw:"
+				+ " [number: %s]"
+				+ " [name: %s]"
+				+ " [drawOn: %s]"
+				, this.number
+				, this.name
+				, this.drawOn);
 	}
 }

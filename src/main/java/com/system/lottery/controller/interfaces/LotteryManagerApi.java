@@ -11,6 +11,11 @@ public interface LotteryManagerApi {
 	
 	LotteryResultWS drawResult(TicketWS ticket);
 	
+	LotteryResultWS verifyResult(TicketWS ticket);
+	LotteryResultWS verifyResults(List<TicketWS> tickets);
+	LotteryResultWS verifyResultOnDate(TicketWS ticket, Date drawOn);
+	LotteryResultWS verifyResultsOnDate(List<TicketWS> tickets, Date drawOn);
+	
 	LotteryDrawWS getCurrentDraw();
 	LotteryDrawWS getDrawFrom(Date date);
 	List<LotteryDrawWS> getLatestYearDraws();

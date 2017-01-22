@@ -3,6 +3,7 @@ package com.system.lottery.model.services.impl;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,15 +60,19 @@ public class LotteryServiceImpl implements LotteryService {
 	
 	@Override
 	public LotteryDraw getDrawFrom(Date drawForDate) throws LotteryDrawException {
-		ZoneId zoneId = ZoneId.systemDefault();
-		Date date = Date.from(drawForDate.toInstant().atZone(zoneId).toLocalDate().atStartOfDay(zoneId).toInstant());
-		LotteryDraw lotteryDraw = this.lotteryDAO.findByDate(date); 
+		LotteryDraw lotteryDraw = this.lotteryDAO.findByDate(drawForDate); 
 		if (lotteryDraw == null) {
-			lotteryDraw = this.drawPrize(date);
+			lotteryDraw = this.drawPrize(drawForDate);
 		}
 		return lotteryDraw;
 	}
 
+	@Override
+	public Ticket checkWinner(@NotNull Ticket ticket) throws LotteryDrawException {
+		List<Ticket> tickets = this.checkWinners(Arrays.asList(ticket));
+		return tickets.isEmpty() ? null : tickets.get(0);
+	}
+	
 	@Override
 	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException {
 		LinkedHashMap<Long, Ticket> winnerTickets = new LinkedHashMap<>();
@@ -90,6 +95,7 @@ public class LotteryServiceImpl implements LotteryService {
 	}
 	
 	@Override
+	@Deprecated
 	public Boolean isWinner(@NotNull Ticket ticket) throws LotteryDrawException {
 		LotteryDraw lastLotteryDraw = this.getLatestDrawResult();
 		Date lotteryDrawOn = lastLotteryDraw.getDrawOn();

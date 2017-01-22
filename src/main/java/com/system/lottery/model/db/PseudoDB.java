@@ -1,6 +1,5 @@
 package com.system.lottery.model.db;
 
-import java.util.Date;
 import java.util.TreeMap;
 
 import com.system.lottery.model.lib.bean.LotteryDraw;
@@ -20,13 +19,13 @@ public final class PseudoDB {
 		return INSTANCE;
 	}
 	
-	private TreeMap<Date, LotteryDraw> lotteryDrows;
+	private TreeMap<Long, LotteryDraw> lotteryDrows;
 
-	public TreeMap<Date, LotteryDraw> getLotteryDrows() {
+	public TreeMap<Long, LotteryDraw> getLotteryDraws() {
 		return lotteryDrows;
 	}
 
-	public void setLotteryDrows(TreeMap<Date, LotteryDraw> lotteryDrows) {
+	public void setLotteryDrows(TreeMap<Long, LotteryDraw> lotteryDrows) {
 		this.lotteryDrows = lotteryDrows;
 	}
 }
