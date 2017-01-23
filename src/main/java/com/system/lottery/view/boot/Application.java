@@ -40,9 +40,9 @@ public class Application implements CommandLineRunner {
     	LOGGER.info("Running lottery system.");
 
     	LocalDate drawForDate = this.appConfiguration.getGenerateLotterySince().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    	LocalDate now = LocalDate.now();
+    	LocalDate monthAgoFromNow = LocalDate.now().minusMonths(1).withDayOfMonth(1).atStartOfDay().toLocalDate();
     	try {
-    		while (now.isAfter(drawForDate)) {
+    		while (monthAgoFromNow.isAfter(drawForDate)) {
     			Date toDate = Date.from(drawForDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     			this.lotteryService.drawPrize(toDate);
     			drawForDate = drawForDate.plusMonths(1);

@@ -68,12 +68,12 @@ public final class WSBuilder {
 	public final static List<TicketWS> toWS(List<Ticket> tickets) {
 		List<TicketWS> ticketWSs = new ArrayList<>();
 		for (Ticket ticket : tickets) {
-			ticketWSs.add(toWS(ticket));
+			ticketWSs.add(toTicketWS(ticket));
 		}
 		return ticketWSs;
 	}
 	
-	public final static TicketWS toWS(@NotNull Ticket ticket) {
+	public final static TicketWS toTicketWS(@NotNull Ticket ticket) {
 		TicketWS ticketWS = new TicketWS();
 		ticketWS.setName(ticket.getName());
 		ticketWS.setNumber(ticket.getNumber());

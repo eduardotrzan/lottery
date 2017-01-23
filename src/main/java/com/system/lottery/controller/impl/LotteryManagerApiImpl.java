@@ -36,27 +36,66 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 	@Autowired
     private LotteryService lotteryService;
 	
-	@RequestMapping(value="/drawResult"
-			, method = RequestMethod.POST
-			, consumes = "application/json"
+	@RequestMapping(value="/purchaseTicket"
+			, method = RequestMethod.GET
 			)
-    public LotteryResultWS drawResult(@RequestBody TicketWS ticketWS) {
+	@Override
+	public TicketWS purchaseTicket(@RequestParam String name) {
 		try {
-			LOGGER.info("Will draw result for ticket #{}", ticketWS.getNumber());
-			LotteryDraw lotteryDraw = this.lotteryService.getLatestDrawResult();
-			Ticket ticket = WSBuilder.toBean(ticketWS);
-			Boolean isWinner = this.lotteryService.isWinner(ticket);
-			LOGGER.info("Is winner? {}", isWinner);
-			
-			LotteryResultWS lotteryResultWS = WSBuilder.build(ticket.getDrawOn(), Arrays.asList(ticket));
-			LOGGER.info("Informing the draw result from {} with prize of {}.", lotteryDraw.getDrawOn(), lotteryDraw.getPrize());
-			return lotteryResultWS;
+			Ticket ticket = this.lotteryService.puchaseTicket(name);
+			if (ticket != null) {
+				LOGGER.info("A ticket was purchased as {}.", ticket.toString());
+				return WSBuilder.toTicketWS(ticket);
+			} else {
+				LOGGER.info("No ticket was purchased under name {}", name);
+				return null; // Change to WS Empty result msg;
+			}
 		} catch (LotteryDrawException lde) {
 			LOGGER.error(lde.getMessage(), lde);
 			return null; // change to WS error
 		}
-    }
-
+	}
+	
+	@RequestMapping(value="/startDraw"
+			, method = RequestMethod.GET
+			)
+	@Override
+	public LotteryDrawWS startDraw() {
+		try {
+			LotteryDraw lotteryDraw = this.lotteryService.drawPrize();
+			if (lotteryDraw != null) {
+				LOGGER.info("A draw happened today {}.", lotteryDraw);
+				return WSBuilder.toLotteryDrawWS(lotteryDraw);
+			} else {
+				LOGGER.info("It wasn't possible to draw a prize today.");
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
+	}
+	
+	@RequestMapping(value="/startDrawForDate"
+			, method = RequestMethod.GET
+			)
+	@Override
+	public LotteryDrawWS startDrawForDate(@RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
+		try {
+			LotteryDraw lotteryDraw = this.lotteryService.drawPrize(drawOn);
+			if (lotteryDraw != null) {
+				LOGGER.info("A draw happened for date {} and prize as {}.", drawOn, lotteryDraw);
+				return WSBuilder.toLotteryDrawWS(lotteryDraw);
+			} else {
+				LOGGER.info("It wasn't possible to draw a prize for {}.", drawOn);
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
+	}
+	
 	@RequestMapping(value="/currentDraw"
 			, method = RequestMethod.GET
 			)
@@ -184,9 +223,21 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 			, consumes = "application/json"
 			)
 	@Override
-	public LotteryResultWS verifyResultOnDate(@RequestBody TicketWS ticket, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
-		// TODO Auto-generated method stub
-		return null;
+	public LotteryResultWS verifyResultOnDate(@RequestBody TicketWS ticketWS, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
+		try {
+			LOGGER.info("Verifying result for ticket {} on draw date {}.", ticketWS, drawOn);
+			Ticket checkedTicket = this.lotteryService.checkWinner(WSBuilder.toBean(ticketWS), drawOn);
+			
+			if (checkedTicket != null) {
+				return WSBuilder.build(checkedTicket.getDrawOn(), Arrays.asList(checkedTicket));
+			} else {
+				LOGGER.info("The ticket verified isn't a winner for draw on {}.", drawOn);
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
 	}
 
 	@RequestMapping(value="/verifyResultsOnDate"
@@ -194,8 +245,20 @@ public class LotteryManagerApiImpl implements LotteryManagerApi {
 			, consumes = "application/json"
 			)
 	@Override
-	public LotteryResultWS verifyResultsOnDate(@RequestBody List<TicketWS> tickets, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
-		// TODO Auto-generated method stub
-		return null;
+	public LotteryResultWS verifyResultsOnDate(@RequestBody List<TicketWS> ticketWSs, @RequestParam @DateTimeFormat(pattern=DATE_PATTERN) Date drawOn) {
+		try {
+			LOGGER.info("Verifying result for tickest {} on draw date {}.", ticketWSs, drawOn);
+			List<Ticket> checkedTickets = this.lotteryService.checkWinners(WSBuilder.toBean(ticketWSs), drawOn);
+			
+			if ((ticketWSs != null) && (!ticketWSs.isEmpty())) {
+				return WSBuilder.build(checkedTickets);
+			} else {
+				LOGGER.info("The tickets verified haven't winners for draw on {}.", drawOn);
+				return null; // Change to WS Empty result msg;
+			}
+		} catch (LotteryDrawException lde) {
+			LOGGER.error(lde.getMessage(), lde);
+			return null; // change to WS error
+		}
 	}
 }

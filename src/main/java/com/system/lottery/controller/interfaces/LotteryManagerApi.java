@@ -9,7 +9,10 @@ import com.system.lottery.controller.lib.ws.TicketWS;
 
 public interface LotteryManagerApi {
 	
-	LotteryResultWS drawResult(TicketWS ticket);
+	TicketWS purchaseTicket(String name);
+	
+	LotteryDrawWS startDraw();
+	LotteryDrawWS startDrawForDate(Date drawOn);
 	
 	LotteryResultWS verifyResult(TicketWS ticket);
 	LotteryResultWS verifyResults(List<TicketWS> tickets);

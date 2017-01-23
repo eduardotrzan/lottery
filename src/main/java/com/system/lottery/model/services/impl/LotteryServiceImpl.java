@@ -1,5 +1,7 @@
 package com.system.lottery.model.services.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -40,6 +42,34 @@ public class LotteryServiceImpl implements LotteryService {
 	private LotteryDAO lotteryDAO;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(LotteryServiceImpl.class);
+	
+	@Override
+	public Ticket puchaseTicket(String name) throws LotteryDrawException {
+		if ((name == null) || name.trim().isEmpty()) {
+			throw new LotteryDrawException(new Date(), "Can't purchase a ticket without providing a name.");
+		}
+		
+		Ticket ticket = new Ticket();
+		ticket.setName(name);
+		
+		LotteryDraw lotteryDraw = this.getLatestDrawResult();
+		Date drawDate = this.getDateForDraw(lotteryDraw.getDrawOn());
+		ticket.setDrawOn(drawDate);
+		
+		Integer randomNumber = this.generateRandomCombination().get(0);
+		ticket.setNumber(randomNumber);
+		
+		return ticket;
+	}
+	
+	private Date getDateForDraw(Date dateForDraw) {
+		return Date.from(
+				dateForDraw.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+					.plusMonths(1)
+					.atStartOfDay(ZoneId.systemDefault())
+					.toInstant()
+				);
+	}
 
 	@Override
 	public LotteryDraw getLatestDrawResult() throws LotteryDrawException {
@@ -76,20 +106,40 @@ public class LotteryServiceImpl implements LotteryService {
 	}
 	
 	@Override
+	public Ticket checkWinner(@NotNull Ticket ticket, Date drawOn) throws LotteryDrawException {
+		List<Ticket> tickets = this.checkWinners(Arrays.asList(ticket), drawOn);
+		return tickets.isEmpty() ? null : tickets.get(0);
+	}
+	
+	@Override
 	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets) throws LotteryDrawException {
+		return this.checkWinners(tickets, null);
+	}
+	
+	@Override
+	public List<Ticket> checkWinners(@NotNull List<Ticket> tickets, Date drawOn) throws LotteryDrawException {
 		LinkedHashMap<Integer, Ticket> winnerTickets = new LinkedHashMap<>();
-		LotteryDraw lastLotteryDraw = this.getLatestDrawResult();
-		Map<Integer, Double> prizePerPosition = this.prizePerPosition(lastLotteryDraw);
 		
-		Double totalPrize = lastLotteryDraw.getPrize();
+		LotteryDraw lotteryDraw;
+		if (drawOn == null) {
+			lotteryDraw = this.getLatestDrawResult();
+		} else {
+			lotteryDraw = this.getDrawFrom(drawOn);
+		}
+		
+		Map<Integer, Double> prizePerPosition = this.prizePerPosition(lotteryDraw);
+		
+		Double totalPrize = lotteryDraw.getPrize();
 		for (Ticket ticket : tickets) {
 			int size = winnerTickets.size();
-			if ((size < 3) && isWinner(ticket)) {
+			if (size > 3) {
+				break;
+			}
+			
+			if (isWinner(ticket)) {
 				double prizeForPosition = prizePerPosition.get(ticket.getNumber());
 				ticket.setPrize(totalPrize * prizeForPosition);
 				winnerTickets.put(ticket.getNumber(), ticket);
-			} else {
-				break;
 			}
 		}
 		
@@ -186,7 +236,14 @@ public class LotteryServiceImpl implements LotteryService {
 		LotteryDraw lotteryDraw = new LotteryDraw();
 		lotteryDraw.setCombination(this.generateRandomCombination());
 		lotteryDraw.setDrawOn(date);
-		lotteryDraw.setPrize(200.0); // move to parameter
+		
+		Double prize = (new Random()).nextDouble();
+		prize *= 1000;
+		prize = BigDecimal.valueOf(prize)
+	    	.setScale(2, RoundingMode.HALF_UP)
+	    	.doubleValue();
+		lotteryDraw.setPrize(prize);
+		
 		LOGGER.info(lotteryDraw.toString());
 		return lotteryDraw;
 	}
